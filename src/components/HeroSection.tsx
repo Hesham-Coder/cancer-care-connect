@@ -1,33 +1,38 @@
 import { motion } from "framer-motion";
-import { Calendar, ArrowRight, Shield, Heart, Users } from "lucide-react";
+import { Calendar, ArrowRight, ArrowLeft, Shield, Heart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/LanguageContext";
 import heroImage from "@/assets/hero-image.jpg";
 
 const HeroSection = () => {
+  const { t, dir } = useLanguage();
+  const ArrowIcon = dir === "rtl" ? ArrowLeft : ArrowRight;
+
   const stats = [
-    { number: "50+", label: "Expert Oncologists" },
-    { number: "25K+", label: "Patients Treated" },
-    { number: "98%", label: "Patient Satisfaction" },
-    { number: "24/7", label: "Emergency Care" },
+    t.hero.stats.doctors,
+    t.hero.stats.patients,
+    t.hero.stats.satisfaction,
+    t.hero.stats.emergency,
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src={heroImage}
           alt="Compassionate cancer care"
           className="w-full h-full object-cover"
+          loading="eager"
         />
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(to right, hsl(200 30% 12% / 0.92) 0%, hsl(200 30% 15% / 0.75) 40%, hsl(200 30% 18% / 0.3) 70%, transparent 100%)",
+            background: dir === "rtl"
+              ? "linear-gradient(to left, hsl(200 30% 12% / 0.92) 0%, hsl(200 30% 15% / 0.75) 40%, hsl(200 30% 18% / 0.3) 70%, transparent 100%)"
+              : "linear-gradient(to right, hsl(200 30% 12% / 0.92) 0%, hsl(200 30% 15% / 0.75) 40%, hsl(200 30% 18% / 0.3) 70%, transparent 100%)",
           }}
         />
-        {/* Subtle pattern overlay */}
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -47,7 +52,7 @@ const HeroSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/30 text-primary-foreground mb-8"
           >
             <Shield className="w-4 h-4" />
-            <span className="text-sm font-medium">Leading Cancer Care Since 1995</span>
+            <span className="text-sm font-medium">{t.hero.badge}</span>
           </motion.div>
 
           {/* Headline */}
@@ -57,15 +62,15 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="hero-title text-primary-foreground mb-6 text-balance"
           >
-            Advanced Cancer Care,{" "}
+            {t.hero.titleLine1}{" "}
             <span className="relative">
-              <span className="relative z-10">Personalized</span>
+              <span className="relative z-10">{t.hero.titleHighlight}</span>
               <span
                 className="absolute bottom-2 left-0 right-0 h-3 bg-accent/40 -z-0"
                 style={{ transform: "skewX(-3deg)" }}
               />
             </span>{" "}
-            For You
+            {t.hero.titleLine2}
           </motion.h1>
 
           {/* Subheadline */}
@@ -75,9 +80,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="hero-subtitle text-primary-foreground/80 mb-10 max-w-2xl"
           >
-            Experience world-class oncology care with cutting-edge treatments,
-            compassionate specialists, and a comprehensive support system designed
-            around your unique journey.
+            {t.hero.subtitle}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -89,12 +92,12 @@ const HeroSection = () => {
           >
             <Button className="btn-hero group">
               <Calendar className="w-5 h-5" />
-              Book Your Appointment
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              {t.hero.ctaPrimary}
+              <ArrowIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
             </Button>
             <Button variant="ghost" className="btn-outline-hero">
               <Heart className="w-5 h-5" />
-              Learn About Our Approach
+              {t.hero.ctaSecondary}
             </Button>
           </motion.div>
 
@@ -106,7 +109,7 @@ const HeroSection = () => {
             className="flex flex-wrap items-center gap-6 text-primary-foreground/70 text-sm"
           >
             <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-2 rtl:space-x-reverse">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
@@ -116,7 +119,7 @@ const HeroSection = () => {
                   </div>
                 ))}
               </div>
-              <span>Join 25,000+ patients who trust us</span>
+              <span>{t.hero.trustText}</span>
             </div>
           </motion.div>
         </div>
@@ -127,10 +130,13 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+          role="list"
+          aria-label="Key statistics"
         >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
+              role="listitem"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
@@ -145,7 +151,6 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Decorative elements */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10" />
     </section>
   );
