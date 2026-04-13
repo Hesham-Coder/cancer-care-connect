@@ -8,7 +8,7 @@
   warm coral accents, and sophisticated typography
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Kufi+Arabic:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -340,4 +340,33 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* RTL utilities */
+  .ltr\:mr-2:where([dir="ltr"] *) {
+    margin-right: 0.5rem;
+  }
+  .rtl\:ml-2:where([dir="rtl"] *) {
+    margin-left: 0.5rem;
+  }
+}
+
+/* Arabic font override */
+html.font-arabic {
+  --font-display: 'Noto Kufi Arabic', 'Playfair Display', Georgia, serif;
+  --font-body: 'Noto Kufi Arabic', 'Inter', system-ui, sans-serif;
+}
+
+/* RTL-specific adjustments */
+[dir="rtl"] .nav-link::after {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .hero-title span span:last-child {
+  transform: skewX(3deg);
+}
+
+/* RTL space-x fix */
+[dir="rtl"] .-space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
 }
